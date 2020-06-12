@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, ViewChild } from '@angular/core';
+import { ModalController, IonInput } from '@ionic/angular';
 import { JanusService } from '../janus.service';
 import { JanusPlayComponent } from '../components/janus-play/janus-play.component';
 
@@ -11,6 +11,8 @@ import { JanusPlayComponent } from '../components/janus-play/janus-play.componen
 export class Tab2Page {
 
   status: string
+  errorMessage: string
+  @ViewChild('room') roomInput: IonInput
 
   constructor(
     private janus: JanusService,
@@ -31,10 +33,17 @@ export class Tab2Page {
 
   async submit(event) {
     event.preventDefault()
+    const room = Number(this.roomInput.value.toString() || undefined)
+    if (Number.isNaN(room) || !Number.isInteger(room)) {
+      return this.errorMessage = 'RoomID invalid, required a positive integer'
+    }
+
     const modal = await this.modalctl.create({
       component: JanusPlayComponent,
+      componentProps: { room },
       animated: true
     })
+    modal.onWillDismiss().then(response => this.errorMessage = response.data)
     await modal.present()
   }
 }

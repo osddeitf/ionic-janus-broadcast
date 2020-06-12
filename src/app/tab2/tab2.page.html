@@ -19,8 +19,9 @@
       <form class="flex-grow flex flex-col justify-center space-y-2" (submit)="submit($event)">
         <div>
           <div class="px-4 border rounded border-blue-400">
-            <ion-input required placeholder="RoomID"></ion-input>
+            <ion-input #room required placeholder="RoomID"></ion-input>
           </div>
+          <div class="text-red-500">{{ errorMessage}}</div>
           <ion-button expand="block" type="submit">Play</ion-button>
         </div>
       </form>

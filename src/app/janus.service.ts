@@ -110,4 +110,11 @@ export class JanusService {
       this.session.destroy({ cleanupHandles: true })
     }
   }
+
+  async roomExists(room: any) {
+    const message = { request: 'exists', room }
+    const response = await this.handle.sendAsync({ message })
+    console.log(response)
+    return response.exists
+  }
 }
