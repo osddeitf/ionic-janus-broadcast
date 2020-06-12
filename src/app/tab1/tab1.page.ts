@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { JanusService } from '../janus.service';
 import { ModalController } from '@ionic/angular';
-import { JanusPublishComponent } from './janus-publish/janus-publish.component';
+import { JanusPublishComponent } from '../components/janus-publish/janus-publish.component';
 
 @Component({
   selector: 'app-tab1',
