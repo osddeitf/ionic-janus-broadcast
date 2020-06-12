@@ -6,7 +6,7 @@ import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { Tab1PageRoutingModule } from './tab1-routing.module';
-import { JanusPublishService } from './janus-publish.service';
+import { JanusService } from '../janus.service';
 
 @NgModule({
   imports: [
@@ -17,6 +17,6 @@ import { JanusPublishService } from './janus-publish.service';
     Tab1PageRoutingModule
   ],
   declarations: [Tab1Page],
-  providers: [JanusPublishService]
+  providers: [JanusService]
 })
 export class Tab1PageModule {}

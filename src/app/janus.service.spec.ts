@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { JanusPublishService } from './janus-publish.service';
+import { JanusService } from './janus.service';
 
-describe('JanusPublishService', () => {
-  let service: JanusPublishService;
+describe('JanusService', () => {
+  let service: JanusService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(JanusPublishService);
+    service = TestBed.inject(JanusService);
   });
 
   it('should be created', () => {

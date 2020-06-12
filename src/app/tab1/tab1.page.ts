@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { JanusPublishService } from './janus-publish.service';
+import { JanusService } from '../janus.service';
 import { ModalController } from '@ionic/angular';
 import { JanusPublishComponent } from './janus-publish/janus-publish.component';
 
@@ -13,7 +13,7 @@ export class Tab1Page {
   status: string
 
   constructor(
-    private janus: JanusPublishService,
+    private janus: JanusService,
     private modalctl: ModalController
   ) {}
 

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import Janus from '../utils/janus';
-import JanusHandle from '../utils/janus_handle';
+import Janus from './utils/janus';
+import JanusHandle from './utils/janus_handle';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class JanusPublishService {
+export class JanusService {
 
   private session: Janus
   private handle: JanusHandle

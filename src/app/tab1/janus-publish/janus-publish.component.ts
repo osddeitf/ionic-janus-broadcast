@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { JanusPublishService } from '../janus-publish.service';
 import { ModalController } from '@ionic/angular';
 import Janus from 'src/app/utils/janus';
+import { JanusService } from 'src/app/janus.service';
 
 @Component({
   selector: 'app-janus-publish',
@@ -15,7 +15,7 @@ export class JanusPublishComponent implements OnInit, OnDestroy {
   @ViewChild('video') video: ElementRef
 
   constructor(
-    private janus: JanusPublishService,
+    private janus: JanusService,
     private modalctl: ModalController
   ) { }
 
