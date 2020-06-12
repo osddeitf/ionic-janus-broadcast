@@ -11,7 +11,6 @@ export class JanusService {
   private session: Janus
   private handle: JanusHandle
   private events: Subject<any>
-  private room: any
   private server = 'http://localhost:8088/janus'
 
   constructor() {
@@ -20,7 +19,7 @@ export class JanusService {
 
   private onMessage(message, jsep) {
     this.events.next({ type: 'message', message, jsep })
-    if (jsep !== undefined && jsep !== null) {
+    if (jsep !== undefined && jsep !== null && message?.videoroom !== 'attached') {
       this.handle.handleRemoteJsep({ jsep })
     }
   }
@@ -52,15 +51,18 @@ export class JanusService {
   async createRoom() {
     const message = { request: 'create' }
     const response = await this.handle.sendAsync({ message })
-    return this.room = response.room
+    return response.room
   }
 
-  async join(room?: number) {
-    if (room) this.room = room
+  async listpublisher(room: number) {
+    const message = { request : "listparticipants", room }
+    const response = await this.handle.sendAsync({ message })
+    return response.participants.filter(x => x.publisher)
+  }
+
+  async join(room: number, options: any) {
     const message = {
-      request: 'join',
-      ptype: 'publisher',
-      room: this.room
+      request: 'join', room, ...options
     }
     // attach's onmessage event
     await this.handle.send({ message })

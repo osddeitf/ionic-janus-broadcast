@@ -22,10 +22,31 @@ export class JanusPlayComponent implements OnInit, OnDestroy {
 
     const exists = await this.janus.roomExists(this.room)
     if (!exists) {
-      this.modalctl.dismiss('Room not existed')
+      return this.modalctl.dismiss('Room not existed')
     }
 
-    await this.janus.join(this.room)
+    this.janus.listen().subscribe({
+      next: event => this.handleEvent(event)
+    })
+
+    const publishers = await this.janus.listpublisher(this.room)
+    if (publishers.length === 0) {
+      return this.modalctl.dismiss('Zombie room')
+    }
+    const feed = publishers.shift().id
+    await this.janus.join(this.room, { ptype: 'subscriber', feed })
+  }
+
+  private handleEvent(event) {
+    console.log(event)
+    if (event.type === 'message') {
+      const type = event.message.videoroom
+      if (type === 'joined') {
+      }
+    }
+    else if (event.type === 'localstream') {
+      // this.onLocalStream(event.stream)
+    }
   }
 
   async ngOnDestroy() {

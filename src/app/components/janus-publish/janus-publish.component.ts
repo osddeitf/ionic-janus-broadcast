@@ -26,7 +26,7 @@ export class JanusPublishComponent implements OnInit, OnDestroy {
     this.janus.listen().subscribe({
       next: event => this.handleEvent(event)
     })
-    this.janus.join()
+    this.janus.join(this.room, { ptype: 'publisher' })
   }
 
   async ngOnDestroy() {
