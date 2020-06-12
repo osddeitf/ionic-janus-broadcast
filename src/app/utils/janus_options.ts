@@ -141,3 +141,9 @@ export interface JanusCreateOfferOptions {
 
   /** ... various options not listed ... */
 }
+
+export interface JanusDetachOptions {
+  success?: () => void
+  error?: (msg: string) => void
+  noRequest?: boolean
+}

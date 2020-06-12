@@ -1,4 +1,4 @@
-import { JanusSendOptions, JanusCreateOfferOptions } from './janus_options';
+import { JanusSendOptions, JanusCreateOfferOptions, JanusDetachOptions } from './janus_options';
 
 export default interface JanusHandle {
   //getVolume, getLocalVolume, getRemoteVolume, `id`, `detached`
@@ -33,7 +33,7 @@ webrtcStuff: object
   /** tells the library to close the PeerConnection; if the optional sendRequest argument is set to true, then a hangup Janus API request is sent to Janus as well (disabled by default, Janus can usually figure this out via DTLS alerts and the like but it may be useful to enable it sometimes); */
   hangup(sendRequest): any
   /** detaches from the plugin and destroys the handle, tearing down the related PeerConnection if it exists. */
-  detach(parameters): any
+  detach(parameters?: JanusDetachOptions): any
 
   /** Extended version */
   sendAsync(parameters: JanusSendOptions): Promise<any>
