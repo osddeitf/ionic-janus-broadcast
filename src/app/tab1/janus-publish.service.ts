@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Janus from '../utils/janus';
 import JanusHandle from '../utils/janus_handle';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +9,21 @@ import { Observable } from 'rxjs';
 export class JanusPublishService {
 
   private handle: JanusHandle
+  private events: Subject<any>
   private room: any
   private server = 'http://localhost:8088/janus'
 
-  constructor() { }
+  constructor() {
+    this.events = new Subject<any>()
+  }
+
+  private onMessage(message: any, jsep: any) {
+    this.events.next({ message, jsep })
+  }
+
+  listen() {
+    return this.events.asObservable()
+  }
 
   init(debug?: any) {
     return new Observable<string>(subscribe => {
@@ -27,7 +38,6 @@ export class JanusPublishService {
           // const session = new Janus({
           const session = await Janus.newPromise({
             server: this.server,
-            // server: 'http://localhost:8088/janus',
             destroyed: () => console.log('destroyed')
           })
 
@@ -41,7 +51,7 @@ export class JanusPublishService {
             iceState: (state) => console.log('iceState', state),
             mediaState: (type, on) => console.log('mediaState', type, on),
             slowLink: (uplink, lost) => console.log('slowLink', uplink, lost),
-            onmessage: (msg, jsep) => console.log('onmessage', msg, jsep),
+            onmessage: (msg, jsep) => this.onMessage(msg, jsep),
             onlocalstream: (stream) => console.log('onlocalstream', stream),
             onremotestream: (stream) => console.log('onremotestream', stream),
             ondataopen: (label) => console.log('ondataopen', label),
@@ -63,6 +73,17 @@ export class JanusPublishService {
 
   async createRoom() {
     const message = { request: 'create' }
-    this.room = await this.handle.sendAsync({ message })
+    const response = await this.handle.sendAsync({ message })
+    this.room = response.room
+  }
+
+  async join() {
+    const message = {
+      request: 'join',
+      ptype: 'publisher',
+      room: this.room
+    }
+    // attach's onmessage event
+    this.handle.send({ message })
   }
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { JanusPublishService } from '../janus-publish.service';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -15,7 +14,21 @@ export class JanusPublishComponent implements OnInit {
     private modalctl: ModalController
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.janus.listen().subscribe({
+      next: event => this.handleEvent(event)
+    })
+    this.janus.join()
+  }
+
+  handleEvent(event) {
+    const type = event.message.videoroom
+    if (type === 'joined') this.onJoined()
+  }
+
+  onJoined() {
+    console.log("JOINED")
+  }
 
   closeModal() {
     this.modalctl.dismiss()
