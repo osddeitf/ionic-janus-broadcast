@@ -100,8 +100,10 @@ export class JanusService {
   }
 
   async disconnect() {
-    this.handle.detach()
-    this.handle = null
+    if (this.handle) {
+      this.handle.detach()
+      this.handle = null
+    }
   }
 
   async shutdown() {
