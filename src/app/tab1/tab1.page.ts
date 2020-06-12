@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { JanusPublishService } from './janus-publish.service';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { JanusPublishComponent } from './janus-publish/janus-publish.component';
 
@@ -28,7 +27,6 @@ export class Tab1Page {
 
   async submit(event) {
     event.preventDefault()
-    await this.janus.createRoom()
     const modal = await this.modalctl.create({
       component: JanusPublishComponent,
       animated: true

@@ -14,7 +14,8 @@ export class JanusPublishComponent implements OnInit {
     private modalctl: ModalController
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.janus.createRoom()
     this.janus.listen().subscribe({
       next: event => this.handleEvent(event)
     })
