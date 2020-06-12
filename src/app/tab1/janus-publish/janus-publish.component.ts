@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { JanusPublishService } from '../janus-publish.service';
+import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-janus-publish',
@@ -7,8 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JanusPublishComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private janus: JanusPublishService,
+    private modalctl: ModalController
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
+  closeModal() {
+    this.modalctl.dismiss()
+  }
 }

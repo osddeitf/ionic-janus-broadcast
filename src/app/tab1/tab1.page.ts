@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { JanusPublishService } from './janus-publish.service';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { JanusPublishComponent } from './janus-publish/janus-publish.component';
 
 @Component({
   selector: 'app-tab1',
@@ -11,7 +13,10 @@ export class Tab1Page {
 
   status: string
 
-  constructor(private router: Router, private janus: JanusPublishService) {}
+  constructor(
+    private janus: JanusPublishService,
+    private modalctl: ModalController
+  ) {}
 
   async ngOnInit() {
     this.janus.init('all').subscribe({
@@ -24,6 +29,10 @@ export class Tab1Page {
   async submit(event) {
     event.preventDefault()
     await this.janus.createRoom()
-    await this.router.navigateByUrl('/tabs/tab1/publish')
+    const modal = await this.modalctl.create({
+      component: JanusPublishComponent,
+      animated: true
+    })
+    await modal.present()
   }
 }

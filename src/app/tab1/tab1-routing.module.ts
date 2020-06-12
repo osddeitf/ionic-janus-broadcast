@@ -7,10 +7,6 @@ const routes: Routes = [
   {
     path: '',
     component: Tab1Page,
-  },
-  {
-    path: 'publish',
-    component: JanusPublishComponent
   }
 ];
 
