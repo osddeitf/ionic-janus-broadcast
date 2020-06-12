@@ -9,6 +9,8 @@ import { ModalController } from '@ionic/angular';
 })
 export class JanusPublishComponent implements OnInit {
 
+  stream: any
+
   constructor(
     private janus: JanusPublishService,
     private modalctl: ModalController
@@ -22,13 +24,24 @@ export class JanusPublishComponent implements OnInit {
     this.janus.join()
   }
 
-  handleEvent(event) {
-    const type = event.message.videoroom
-    if (type === 'joined') this.onJoined()
+  private handleEvent(event) {
+    if (event.type === 'message') {
+      const type = event.message.videoroom
+      if (type === 'joined') this.onJoined()
+    }
+    else if (event.type === 'localstream') {
+      this.onLocalStream(event.stream)
+    }
   }
 
-  onJoined() {
+  private onJoined() {
     console.log("JOINED")
+    this.janus.offer()
+  }
+
+  private onLocalStream(stream: any) {
+    console.log("Stream")
+    this.stream = stream
   }
 
   closeModal() {
