@@ -62,7 +62,7 @@ export class JanusPublishService {
   }
 
   async createRoom() {
-    const message = { request: 'create', room: 'null' }
+    const message = { request: 'create' }
     this.room = await this.handle.sendAsync({ message })
   }
 }
