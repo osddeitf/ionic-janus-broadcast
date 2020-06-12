@@ -85,7 +85,7 @@ export class JanusPublishService {
 
   async offer() {
     const jsep = await this.handle.createOfferAsync({
-      media: { video: "hires", audio: true }
+      media: { video: 'hires', audioRecv: false, videoRecv: false, audioSend: true, videoSend: true },	// Publishers are sendonly
     })
   }
 }

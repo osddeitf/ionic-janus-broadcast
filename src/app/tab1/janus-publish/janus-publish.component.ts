@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { JanusPublishService } from '../janus-publish.service';
 import { ModalController } from '@ionic/angular';
+import Janus from 'src/app/utils/janus';
 
 @Component({
   selector: 'app-janus-publish',
@@ -10,6 +11,7 @@ import { ModalController } from '@ionic/angular';
 export class JanusPublishComponent implements OnInit {
 
   stream: any
+  @ViewChild('video') video: ElementRef
 
   constructor(
     private janus: JanusPublishService,
@@ -42,6 +44,7 @@ export class JanusPublishComponent implements OnInit {
   private onLocalStream(stream: any) {
     console.log("Stream")
     this.stream = stream
+    Janus.attachMediaStream(this.video.nativeElement, stream)
   }
 
   closeModal() {

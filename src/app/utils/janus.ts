@@ -3,6 +3,8 @@ import JanusHandle, { handleExtended } from './janus_handle'
 
 declare class Janus {
   static init(options: JanusInitOptions): void
+  static listDevices(callback): void
+  static attachMediaStream(element: any, stream: any): void
 
   /** EXTENSIONS */
   static initPromise(options: JanusInitOptions): Promise<void>
