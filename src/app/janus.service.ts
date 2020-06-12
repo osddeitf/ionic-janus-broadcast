@@ -31,22 +31,21 @@ export class JanusService {
 
   init(debug?: any) {
     return new Observable<string>(subscribe => {
-      (async () => {
-        try {
-          subscribe.next("initializing...")
-          await Janus.initPromise({ debug })
-          
+      subscribe.next("initializing...")
+      Janus.init({
+        debug,
+        callback: () => {
           subscribe.next("creating session...")
-          this.session = await Janus.newPromise({
+          this.session = new Janus({
             server: this.server,
+            success: () => subscribe.complete(),
+            error: e => subscribe.error(e),
             destroyed: () => console.log('destroyed')
           })
           subscribe.complete()
         }
-        catch (e) {
-          subscribe.error(e)
-        }
-      })()
+      })
+      
     })
   }
 
@@ -107,6 +106,8 @@ export class JanusService {
   }
 
   async shutdown() {
-    this.session.destroy({ cleanupHandles: true })
+    if (this.session) {
+      this.session.destroy({ cleanupHandles: true })
+    }
   }
 }
