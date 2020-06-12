@@ -100,7 +100,11 @@ export class JanusPublishService {
   }
 
   async disconnect() {
-    this.handle.detach(null)
+    this.handle.detach()
     this.handle = null
+  }
+
+  async shutdown() {
+    this.session.destroy({ cleanupHandles: true })
   }
 }

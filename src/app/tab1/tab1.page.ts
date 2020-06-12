@@ -17,12 +17,16 @@ export class Tab1Page {
     private modalctl: ModalController
   ) {}
 
-  async ngOnInit() {
+  ionViewDidEnter() {
     this.janus.init('all').subscribe({
       next: status => this.status = status,
       error: e => console.log(e),
       complete: () => this.status = 'ready'
     })
+  }
+
+  ionViewDidLeave() {
+    this.janus.shutdown()
   }
 
   async submit(event) {
@@ -33,4 +37,5 @@ export class Tab1Page {
     })
     await modal.present()
   }
+
 }
