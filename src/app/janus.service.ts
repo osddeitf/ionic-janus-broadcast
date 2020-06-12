@@ -55,7 +55,8 @@ export class JanusService {
     return this.room = response.room
   }
 
-  async join() {
+  async join(room?: number) {
+    if (room) this.room = room
     const message = {
       request: 'join',
       ptype: 'publisher',
@@ -111,7 +112,7 @@ export class JanusService {
     }
   }
 
-  async roomExists(room: any) {
+  async roomExists(room: number) {
     const message = { request: 'exists', room }
     const response = await this.handle.sendAsync({ message })
     console.log(response)

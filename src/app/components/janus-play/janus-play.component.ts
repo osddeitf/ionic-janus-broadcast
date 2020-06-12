@@ -24,6 +24,8 @@ export class JanusPlayComponent implements OnInit, OnDestroy {
     if (!exists) {
       this.modalctl.dismiss('Room not existed')
     }
+
+    await this.janus.join(this.room)
   }
 
   async ngOnDestroy() {
