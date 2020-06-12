@@ -8,6 +8,7 @@ import { Observable, Subject } from 'rxjs';
 })
 export class JanusPublishService {
 
+  private session: Janus
   private handle: JanusHandle
   private events: Subject<any>
   private room: any
@@ -33,38 +34,13 @@ export class JanusPublishService {
       (async () => {
         try {
           subscribe.next("initializing...")
-
           await Janus.initPromise({ debug })
-
+          
           subscribe.next("creating session...")
-
-          // const session = new Janus({
-          const session = await Janus.newPromise({
+          this.session = await Janus.newPromise({
             server: this.server,
             destroyed: () => console.log('destroyed')
           })
-
-          subscribe.next("attaching to plugin...")
-
-          // ;(Janus as any).listDevices(x => console.log(x))
-          this.handle = await session.attachPromise({
-            plugin: "janus.plugin.videoroom",
-            consentDialog: (on) => console.log('consentDialog', on),
-            webrtcState: (active, reason) => console.log('webrtcState', active, reason),
-            iceState: (state) => console.log('iceState', state),
-            mediaState: (type, on) => console.log('mediaState', type, on),
-            slowLink: (uplink, lost) => console.log('slowLink', uplink, lost),
-            onmessage: (message, jsep) => this.onMessage(message, jsep),
-            onlocalstream: (stream) => this.events.next({ type: 'localstream', stream }),
-            onremotestream: (stream) => console.log('onremotestream', stream),
-            ondataopen: (label) => console.log('ondataopen', label),
-            ondata: (data, label) => console.log('ondata', data, label),
-            oncleanup: () => console.log('oncleanup'),
-            ondetached: () => console.log('ondetached')
-          })
-
-          /** Enable promise */
-          this.handle = Janus.extendHandle(this.handle)
           subscribe.complete()
         }
         catch (e) {
@@ -100,5 +76,31 @@ export class JanusPublishService {
       video: true
     }
     await this.handle.send({ message, jsep })
+  }
+
+  async connect() {
+    this.handle = await this.session.attachPromise({
+      plugin: "janus.plugin.videoroom",
+      consentDialog: (on) => console.log('consentDialog', on),
+      webrtcState: (active, reason) => console.log('webrtcState', active, reason),
+      iceState: (state) => console.log('iceState', state),
+      mediaState: (type, on) => console.log('mediaState', type, on),
+      slowLink: (uplink, lost) => console.log('slowLink', uplink, lost),
+      onmessage: (message, jsep) => this.onMessage(message, jsep),
+      onlocalstream: (stream) => this.events.next({ type: 'localstream', stream }),
+      onremotestream: (stream) => console.log('onremotestream', stream),
+      ondataopen: (label) => console.log('ondataopen', label),
+      ondata: (data, label) => console.log('ondata', data, label),
+      oncleanup: () => console.log('oncleanup'),
+      ondetached: () => console.log('ondetached')
+    })
+
+    /** Enable promise */
+    this.handle = Janus.extendHandle(this.handle)
+  }
+
+  async disconnect() {
+    this.handle.detach(null)
+    this.handle = null
   }
 }
