@@ -38,7 +38,7 @@ export class JanusPublishComponent implements OnInit {
 
   private onJoined() {
     console.log("JOINED")
-    this.janus.offer()
+    this.janus.publish()
   }
 
   private onLocalStream(stream: any) {

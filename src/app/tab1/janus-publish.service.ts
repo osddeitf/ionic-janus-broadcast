@@ -17,6 +17,13 @@ export class JanusPublishService {
     this.events = new Subject<any>()
   }
 
+  private onMessage(message, jsep) {
+    this.events.next({ type: 'message', message, jsep })
+    if (jsep !== undefined && jsep !== null) {
+      this.handle.handleRemoteJsep({ jsep })
+    }
+  }
+
   listen() {
     return this.events.asObservable()
   }
@@ -47,7 +54,7 @@ export class JanusPublishService {
             iceState: (state) => console.log('iceState', state),
             mediaState: (type, on) => console.log('mediaState', type, on),
             slowLink: (uplink, lost) => console.log('slowLink', uplink, lost),
-            onmessage: (message, jsep) => this.events.next({ type: 'message', message, jsep }),
+            onmessage: (message, jsep) => this.onMessage(message, jsep),
             onlocalstream: (stream) => this.events.next({ type: 'localstream', stream }),
             onremotestream: (stream) => console.log('onremotestream', stream),
             ondataopen: (label) => console.log('ondataopen', label),
@@ -80,12 +87,18 @@ export class JanusPublishService {
       room: this.room
     }
     // attach's onmessage event
-    this.handle.send({ message })
+    await this.handle.send({ message })
   }
 
-  async offer() {
+  async publish() {
     const jsep = await this.handle.createOfferAsync({
       media: { video: 'hires', audioRecv: false, videoRecv: false, audioSend: true, videoSend: true },	// Publishers are sendonly
     })
+    const message = {
+      request: 'configure',
+      audio: true,
+      video: true
+    }
+    await this.handle.send({ message, jsep })
   }
 }
