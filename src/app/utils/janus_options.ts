@@ -89,3 +89,55 @@ export interface JanusSendOptions {
   success?: (data?: any) => void
   error?: (msg: string) => void
 }
+
+export interface JanusCreateOfferOptions {
+  success?: (jsep: any) => void
+  error?: (e: string) => void
+  customizeSdp?: (data: any) => void
+
+  /** default { audio: true, video: true } */
+  media?: {
+    audioSend?: boolean
+    audioRecv?: boolean
+    audio?: boolean | { deviceId: any }
+    videoSend?: boolean
+    videoRecv?: boolean
+    video?:
+      "screen" |
+      ("lowres" | "lowres-16:9" | "stdres" | "stdres-16:9" | "hires" | "hires-16:9") |
+      { deviceId: any, width?: number, height?: number }
+    /** do or do not use Data Channels, default is false */
+    data?: boolean
+
+    /** whether a getUserMedia should fail if audio send is asked, but no audio device is available, default is false */
+    failIfNoAudio?: boolean
+    /** whether a getUserMedia should fail if video send is asked, but no video device is available, default is false */
+    failIfNoVideo?: boolean
+    /** in case you're sharing a screen/application, allows you to specify the framerate (default=3); */
+    screenshareFrameRate?: number
+
+    /** if set, start capturing audio if you weren't (will fail if you're sending audio already) */
+    addAudio?: boolean
+    /** if set, start capturing video if you weren't (will fail if you're sending video already) */
+    addVideo?: boolean
+    /** if set, negotiate a datachannel if it didn't exist (is actually just a synonym for data:true ) */
+    addData?: boolean
+    /** if set, stop capturing audio and remove the local audio track */
+    removeAudio?: boolean
+    /** if set, stop capturing video and remove the local video track */
+    removeVideo?: boolean
+    /** if set, stop capturing the current audio (remove the local audio track), and capture a new audio source */
+    replaceAudio?: boolean
+    /** if set, stop capturing the current video (remove the local video track), and capture a new video source */
+    replaceVideo?: boolean
+  }
+  
+  simulcast?: boolean
+  simulcast2?: boolean
+
+  /** to tell the library whether you want Trickle ICE to be used (true, the default) or not (false) */
+  trickle?: boolean
+  stream?: any
+
+  /** ... various options not listed ... */
+}
