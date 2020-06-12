@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, OnDestroy } from '@angular/core';
 import { JanusService } from 'src/app/janus.service';
 import { ModalController } from '@ionic/angular';
 
@@ -7,7 +7,7 @@ import { ModalController } from '@ionic/angular';
   templateUrl: './janus-play.component.html',
   styleUrls: ['./janus-play.component.scss'],
 })
-export class JanusPlayComponent implements OnInit {
+export class JanusPlayComponent implements OnInit, OnDestroy {
 
   @Input() room: any
   @ViewChild('video') video: ElementRef
@@ -24,6 +24,10 @@ export class JanusPlayComponent implements OnInit {
     if (!exists) {
       this.modalctl.dismiss('Room not existed')
     }
+  }
+
+  async ngOnDestroy() {
+    await this.janus.disconnect()
   }
 
   closeModal() {
