@@ -10,6 +10,7 @@ import Janus from 'src/app/utils/janus';
 })
 export class JanusPublishComponent implements OnInit, OnDestroy {
 
+  room: any
   stream: any
   @ViewChild('video') video: ElementRef
 
@@ -20,7 +21,8 @@ export class JanusPublishComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.janus.connect()
-    await this.janus.createRoom()
+    this.room = await this.janus.createRoom()
+
     this.janus.listen().subscribe({
       next: event => this.handleEvent(event)
     })
