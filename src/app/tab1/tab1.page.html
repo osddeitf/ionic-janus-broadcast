@@ -6,25 +6,21 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   <div class="h-full flex flex-col">
     <ion-header collapse="condense">
       <ion-toolbar>
-        <ion-title size="large">Tab 1</ion-title>
+        <ion-title size="large">Janus publish</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <div class="p-4 bg-teal-100 flex-grow flex flex-col text-gray-800 space-y-2">
       <div>Status: {{ status }}</div>
       <form class="flex-grow flex flex-col justify-center space-y-2" (submit)="submit($event)">
-        <!-- <div class="px-4 border rounded border-blue-400">
-          <ion-input required placeholder="RoomID"></ion-input>
-        </div> -->
         <div>
-          <ion-button expand="block" type="submit">Create room</ion-button>
+          <ion-button expand="block" type="submit">Publish</ion-button>
         </div>
       </form>
     </div>
-    <!-- <app-explore-container name="Tab 1 page">abc</app-explore-container> -->
   </div>
 </ion-content>
