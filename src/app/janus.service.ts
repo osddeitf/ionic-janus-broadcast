@@ -41,7 +41,6 @@ export class JanusService {
             error: e => subscribe.error(e),
             destroyed: () => console.log('destroyed')
           })
-          subscribe.complete()
         }
       })
       
