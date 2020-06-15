@@ -12,6 +12,8 @@ export class Tab2Page {
 
   status: string
   errorMessage: string
+  rooms: number[] = null
+  room: number = null
   @ViewChild('room') roomInput: IonInput
 
   constructor(
@@ -23,24 +25,38 @@ export class Tab2Page {
     this.janus.init('all').subscribe({
       next: status => this.status = status,
       error: e => console.log(e),
-      complete: () => this.status = 'ready'
+      complete: () => this.ready()
     })
+  }
+
+  async ready() {
+    this.status = 'Connecting to plugin...'
+    await this.janus.connect()
+    
+    this.status = 'Getting room list...'
+    const response = await this.janus.listroom()
+    if (response.videoroom !== 'success') {
+      this.status = 'Failed getting room list'
+    }
+    else {
+      this.rooms = response.list.filter(x => x.num_participants !== 0).map(x => x.room)
+      this.status = "Ready"
+    }
+    this.janus.disconnect()
   }
 
   ionViewDidLeave() {
     this.janus.shutdown()
   }
 
-  async submit(event) {
-    event.preventDefault()
-    const room = Number(this.roomInput.value.toString() || undefined)
-    if (Number.isNaN(room) || !Number.isInteger(room)) {
-      return this.errorMessage = 'RoomID invalid, required a positive integer'
-    }
+  onSelect(event) {
+    this.room = event.target.value
+  }
 
+  async submit() {
     const modal = await this.modalctl.create({
       component: JanusPlayComponent,
-      componentProps: { room },
+      componentProps: { room: this.room },
       animated: true
     })
     modal.onWillDismiss().then(response => this.errorMessage = response.data)

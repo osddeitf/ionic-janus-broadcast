@@ -16,15 +16,17 @@
 
     <div class="p-4 bg-teal-100 flex-grow flex flex-col text-gray-800 space-y-2">
       <div>Status: {{ status }}</div>
-      <form class="flex-grow flex flex-col justify-center space-y-2" (submit)="submit($event)">
-        <div>
-          <div class="px-4 border rounded border-blue-400">
-            <ion-input #room required placeholder="RoomID"></ion-input>
-          </div>
-          <div class="text-red-500">{{ errorMessage}}</div>
-          <ion-button expand="block" type="submit">Play</ion-button>
-        </div>
-      </form>
+      <ion-radio-group *ngIf="rooms !== null" (ionChange)="onSelect($event)">
+        <ion-item *ngFor="let room of rooms">
+          <ion-label>{{ room }}</ion-label>
+          <ion-radio slot="end" [value]="room"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+      <div *ngIf="rooms?.length === 0">No room</div>
+      <div>
+        <ion-button expand="block" (click)="ready()">Reload</ion-button>
+        <ion-button [disabled]="room === null" expand="block" (click)="submit()">Play</ion-button>
+      </div>
     </div>
   </div>
 </ion-content>
