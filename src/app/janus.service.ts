@@ -80,17 +80,27 @@ export class JanusService {
     await this.handle.send({ message, jsep })
   }
 
+  async subscribe(room: number, jsep: any) {
+    const rjsep = await this.handle.createAnswerAsync({
+      jsep,
+      media: { audioSend: false, videoSend: false }
+    })
+
+    const message = { request: 'start', room }
+    this.handle.send({ message, jsep: rjsep })
+  }
+
   async connect() {
     this.handle = await this.session.attachPromise({
       plugin: "janus.plugin.videoroom",
       consentDialog: (on) => console.log('consentDialog', on),
-      webrtcState: (active, reason) => console.log('webrtcState', active, reason),
+      webrtcState: (active, reason) => this.events.next({ type: 'webrtcState', active, reason }),
       iceState: (state) => console.log('iceState', state),
       mediaState: (type, on) => console.log('mediaState', type, on),
       slowLink: (uplink, lost) => console.log('slowLink', uplink, lost),
       onmessage: (message, jsep) => this.onMessage(message, jsep),
       onlocalstream: (stream) => this.events.next({ type: 'localstream', stream }),
-      onremotestream: (stream) => console.log('onremotestream', stream),
+      onremotestream: (stream) => this.events.next({ type: 'remotestream', stream }),
       ondataopen: (label) => console.log('ondataopen', label),
       ondata: (data, label) => console.log('ondata', data, label),
       oncleanup: () => console.log('oncleanup'),

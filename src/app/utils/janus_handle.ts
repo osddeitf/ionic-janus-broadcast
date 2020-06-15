@@ -1,4 +1,4 @@
-import { JanusSendOptions, JanusCreateOfferOptions, JanusDetachOptions } from './janus_options';
+import { JanusSendOptions, JanusCreateOfferOptions, JanusDetachOptions, JanusCreateAnswerOptions } from './janus_options';
 
 export default interface JanusHandle {
   //getVolume, getLocalVolume, getRemoteVolume, `id`, `detached`
@@ -21,7 +21,7 @@ webrtcStuff: object
   /** asks the library to create a WebRTC compliant OFFER; */
   createOffer(callbacks: JanusCreateOfferOptions): any
   /** asks the library to create a WebRTC compliant ANSWER; */
-  createAnswer(callbacks): any
+  createAnswer(callbacks: JanusCreateAnswerOptions): any
   /** asks the library to handle an incoming WebRTC compliant session description; */
   handleRemoteJsep(callbacks): any
   /** sends a DTMF tone on the PeerConnection; */
@@ -38,6 +38,7 @@ webrtcStuff: object
   /** Extended version */
   sendAsync(parameters: JanusSendOptions): Promise<any>
   createOfferAsync(options: JanusCreateOfferOptions): Promise<any>
+  createAnswerAsync(options: JanusCreateAnswerOptions): Promise<any>
 }
 
 export const handleExtended = {
@@ -49,6 +50,11 @@ export const handleExtended = {
   createOfferAsync: async function(this: JanusHandle, options: JanusCreateOfferOptions) {
     return new Promise((resolve, reject) =>
       this.createOffer({ ...options, success: resolve, error: reject })
+    )
+  },
+  createAnswerAsync: async function(this: JanusHandle, options: JanusCreateAnswerOptions) {
+    return new Promise((resolve, reject) =>
+      this.createAnswer({ ...options, success: resolve, error: reject })
     )
   }
 }

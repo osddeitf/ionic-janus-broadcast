@@ -142,6 +142,10 @@ export interface JanusCreateOfferOptions {
   /** ... various options not listed ... */
 }
 
+export interface JanusCreateAnswerOptions extends JanusCreateOfferOptions {
+  jsep: any
+}
+
 export interface JanusDetachOptions {
   success?: () => void
   error?: (msg: string) => void

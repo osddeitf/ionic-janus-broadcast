@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, OnDestroy } from '@angular/core';
 import { JanusService } from 'src/app/janus.service';
 import { ModalController } from '@ionic/angular';
+import Janus from 'src/app/utils/janus';
 
 @Component({
   selector: 'app-janus-play',
@@ -41,11 +42,16 @@ export class JanusPlayComponent implements OnInit, OnDestroy {
     console.log(event)
     if (event.type === 'message') {
       const type = event.message.videoroom
-      if (type === 'joined') {
+      if (type === 'attached') {
+        this.janus.subscribe(this.room, event.jsep)
       }
     }
-    else if (event.type === 'localstream') {
-      // this.onLocalStream(event.stream)
+    else if (event.type === 'remotestream') {
+      Janus.attachMediaStream(this.video.nativeElement, event.stream)
+    }
+    else if (event.type === "webrtcState") {
+      if (!event.active)
+        this.modalctl.dismiss()
     }
   }
 
