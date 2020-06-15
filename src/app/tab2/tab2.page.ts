@@ -30,6 +30,7 @@ export class Tab2Page {
   }
 
   async ready() {
+    this.rooms = this.room = null
     this.status = 'Connecting to plugin...'
     await this.janus.connect()
     
@@ -47,6 +48,7 @@ export class Tab2Page {
 
   ionViewDidLeave() {
     this.janus.shutdown()
+    this.rooms = this.room = null
   }
 
   onSelect(event) {

@@ -26,6 +26,7 @@
       <div>
         <ion-button expand="block" (click)="ready()">Reload</ion-button>
         <ion-button [disabled]="room === null" expand="block" (click)="submit()">Play</ion-button>
+        <div class="text-red-500">{{ errorMessage }}</div>
       </div>
     </div>
   </div>
