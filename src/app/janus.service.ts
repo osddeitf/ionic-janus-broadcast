@@ -54,6 +54,11 @@ export class JanusService {
     return response.room
   }
 
+  async listroom() {
+    const message = { request: 'list' }
+    return await this.handle.sendAsync({ message })
+  }
+
   async listpublisher(room: number) {
     const message = { request : "listparticipants", room }
     const response = await this.handle.sendAsync({ message })
@@ -129,5 +134,10 @@ export class JanusService {
     const response = await this.handle.sendAsync({ message })
     console.log(response)
     return response.exists
+  }
+
+  async destroy(room: number) {
+    const message = { request: 'destroy', room }
+    return this.handle.sendAsync({ message })
   }
 }
