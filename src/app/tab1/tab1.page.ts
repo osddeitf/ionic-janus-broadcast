@@ -29,8 +29,7 @@ export class Tab1Page {
     this.janus.shutdown()
   }
 
-  async submit(event) {
-    event.preventDefault()
+  async submit() {
     const modal = await this.modalctl.create({
       component: JanusPublishComponent,
       animated: true
