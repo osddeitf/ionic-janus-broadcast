@@ -27,6 +27,7 @@ export class JanusPublishComponent implements OnInit, OnDestroy {
       next: event => this.handleEvent(event)
     })
     await this.janus.join(this.room, { ptype: 'publisher' })
+    /** -> publish -> attachMediaStream */
   }
 
   async ngOnDestroy() {
@@ -37,22 +38,12 @@ export class JanusPublishComponent implements OnInit, OnDestroy {
   private handleEvent(event) {
     if (event.type === 'message') {
       const type = event.message.videoroom
-      if (type === 'joined') this.onJoined()
+      if (type === 'joined') this.janus.publish()
     }
     else if (event.type === 'localstream') {
-      this.onLocalStream(event.stream)
+      this.stream = event.stream
+      Janus.attachMediaStream(this.video.nativeElement, this.stream)
     }
-  }
-
-  private onJoined() {
-    console.log("JOINED")
-    this.janus.publish()
-  }
-
-  private onLocalStream(stream: any) {
-    console.log("Stream")
-    this.stream = stream
-    Janus.attachMediaStream(this.video.nativeElement, stream)
   }
 
   closeModal() {

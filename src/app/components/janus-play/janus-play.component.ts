@@ -36,15 +36,18 @@ export class JanusPlayComponent implements OnInit, OnDestroy {
     }
     const feed = publishers.shift().id
     await this.janus.join(this.room, { ptype: 'subscriber', feed })
+    /**
+     * <- { videoroom: 'attached' }, jsep
+     * -> { message: { request: 'start', room }, jsep: createAnswer(jsep) }
+     * <- { type: 'remotestream', stream }
+     */
   }
 
   private handleEvent(event) {
     console.log(event)
     if (event.type === 'message') {
       const type = event.message.videoroom
-      if (type === 'attached') {
-        this.janus.subscribe(this.room, event.jsep)
-      }
+      if (type === 'attached') this.janus.subscribe(this.room, event.jsep)
     }
     else if (event.type === 'remotestream') {
       Janus.attachMediaStream(this.video.nativeElement, event.stream)
