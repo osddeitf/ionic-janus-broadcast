@@ -17,10 +17,8 @@
     <div class="p-4 bg-teal-100 flex-grow flex flex-col text-gray-800 space-y-2">
       <div>Status: {{ status }}</div>
       <div>
-        <ion-button expand="block" (click)="submit()">Publish</ion-button>
+        <ion-button [disabled]="status !== 'ready'" expand="block" (click)="submit()">Publish</ion-button>
       </div>
-      <!-- <div class="flex-grow flex flex-col justify-center space-y-2">
-      </div> -->
     </div>
   </div>
 </ion-content>
