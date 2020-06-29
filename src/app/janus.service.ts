@@ -47,8 +47,8 @@ export class JanusService {
     })
   }
 
-  async createRoom() {
-    const message = { request: 'create' }
+  async createRoom(options?: VideoroomCreateOptions) {
+    const message = { request: 'create', ...options }
     const response = await this.handle.sendAsync({ message })
     return response.room
   }

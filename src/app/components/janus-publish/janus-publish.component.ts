@@ -21,7 +21,12 @@ export class JanusPublishComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.janus.connect()
-    this.room = await this.janus.createRoom()
+    this.room = await this.janus.createRoom({
+      record: true,
+      rec_dir: '/data',
+      videocodec: 'h264',
+      audiocodec: 'opus'
+    })
 
     this.janus.listen().subscribe({
       next: event => this.handleEvent(event)
